@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - GraphQL</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #0a0a1a; /* Match the night sky color */
+            overflow-x: hidden;
+        }
+        
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .error-card {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+            min-height: 420px;
+            background: rgba(10, 10, 30, 0.6);
+            border-radius: 15px;
+            padding: 60px 40px;
+            border: 1px solid rgba(0, 238, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 238, 255, 0.3);
+            animation: glow 3s infinite alternate;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            color: #0ef;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(0, 238, 255, 0.6);
+        }
+        
+        .error-message {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 2.5rem;
+        }
+        
+        .back-button {
+            width: 100%;
+            padding: 15px;
+            background-color: transparent;
+            border: 2px solid #0ef;
+            color: #0ef;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .back-button:hover {
+            background-color: #0ef;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 238, 255, 0.8);
+        }
+
+        /* Black Hole elements - matching login page */
+        .black-hole-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .black-hole, .event-horizon, .accretion-disk {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .black-hole {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #000;
+            box-shadow: 
+                0 0 60px 30px rgba(0, 0, 0, 0.9),
+                0 0 100px 60px rgba(10, 0, 40, 0.8),
+                0 0 140px 90px rgba(5, 0, 20, 0.5);
+        }
+
+        .accretion-disk {
+            width: 550px;
+            height: 180px;
+            border-radius: 50%;
+            border: none;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(0, 238, 255, 0.8) 0%,
+                rgba(45, 7, 98, 0.7) 25%,
+                rgba(11, 1, 45, 0.5) 50%,
+                rgba(0, 0, 0, 0) 70%
+            );
+            filter: blur(3px);
+            opacity: 0.7;
+            animation: rotate 20s linear infinite;
+        }
+
+        .event-horizon {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 100px 40px rgba(0, 238, 255, 0.2);
+            animation: pulse 4s ease-in-out infinite alternate;
+        }
+
+        .orbiting-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .orbiting-star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 3px;
+            height: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transform-origin: 0 0;
+            animation: orbit-star var(--orbit-duration, 15s) linear infinite;
+            opacity: var(--star-opacity, 0.8);
+        }
+
+        /* Make sure the vortex layer gradient matches the night sky theme */
+        .vortex-layer {
+            background: radial-gradient(circle at center, 
+                rgba(25, 5, 65, 0.9) 0%, 
+                rgba(5, 10, 40, 0.7) 50%, 
+                rgba(5, 5, 20, 0.5) 100%);
+            opacity: 0.7;
+        }
+
+        @keyframes orbit-star {
+            from { transform: rotate(0deg) translateX(var(--orbit-radius, 150px)) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(var(--orbit-radius, 150px)) rotate(-360deg); }
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 30px rgba(0, 238, 255, 0.3); }
+            100% { box-shadow: 0 0 50px rgba(0, 238, 255, 0.7); }
+        }
+    </style>
+           
+</head>
+<body>
+    <div class="vortex-layer"></div>
+    <div class="orbit-stars"></div>
+    <div class="stars"></div>
+    
+    <!-- Black hole elements matching login page -->
+    <div class="black-hole-container">
+        <div class="event-horizon"></div>
+        <div class="accretion-disk"></div>
+        <div class="black-hole"></div>
+        <div class="orbiting-stars" id="orbiting-stars"></div>
+    </div>
+    
+    <div class="error-container">
+        <div class="error-card">
+            <div>
+                <div class="error-code" id="error-code">404</div>
+                <div class="error-message" id="error-message">Page Not Found</div>
+            </div>
+            <a href="/" class="back-button">Back to Home</a>
+        </div>
+    </div>
+
+    <script src="star.js"></script>
+    <script>
+        // Get error details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code') || '404';
+        const message = urlParams.get('message') || 'Page Not Found';
+        
+        // Update the error display
+        document.getElementById('error-code').textContent = code;
+        document.getElementById('error-message').textContent = message;
+        
+        // Create orbiting stars to match login page
+        const orbitingStarsContainer = document.getElementById('orbiting-stars');
+        
+        // Create orbiting stars
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'orbiting-star';
+            
+            // Random radius for orbit
+            const orbitRadius = 150 + Math.random() * 300;
+            star.style.setProperty('--orbit-radius', `${orbitRadius}px`);
+            
+            // Random orbit duration
+            const orbitDuration = 15 + Math.random() * 30;
+            star.style.setProperty('--orbit-duration', `${orbitDuration}s`);
+            
+            // Random opacity based on distance
+            const opacity = Math.max(0.1, 1 - (orbitRadius - 150) / 300);
+            star.style.setProperty('--star-opacity', opacity);
+            
+            // Random size for stars
+            const size = 2 + Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Random color variation
+            const hue = Math.random() > 0.7 ? 180 : 240; // Mostly blue, some cyan
+            const lightness = 70 + Math.random() * 30;
+            star.style.backgroundColor = `hsl(${hue}, 100%, ${lightness}%)`;
+            
+            // Random animation delay
+            star.style.animationDelay = `${Math.random() * -30}s`;
+            
+            orbitingStarsContainer.appendChild(star);
+        }
+        
+        // Create cursor star effect
+        document.addEventListener('mousemove', function(e) {
+            // Create a star at cursor position
+            if (Math.random() > 0.8) { // Only create stars occasionally
+                const star = document.createElement('div');
+                star.className = 'cursor-star';
+                star.style.left = `${e.pageX}px`;
+                star.style.top = `${e.pageY}px`;
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random start opacity
+                star.style.opacity = Math.random() * 0.5 + 0.5;
+                
+                document.body.appendChild(star);
+                
+                // Remove the star after animation completes
+                setTimeout(() => {
+                    if (star && star.parentNode) {
+                        star.parentNode.removeChild(star);
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

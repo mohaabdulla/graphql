@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="vortex-layer"></div>
+    <div class="orbit-stars"></div>
+    <div class="stars"></div>
+
+    <button class="logout-button" onclick="logout()">Logout</button>
+    
+    <div class="constellation-container">
+        <!-- User info will be the central node -->
+        <div class="constellation-node central-node">
+            <h2>User Profile</h2>
+            <div class="user-info-content">
+                <!-- User info will be inserted here -->
+            </div>
+        </div>
+        
+        <!-- Data visualization nodes -->
+        <div class="constellation-node xp-node">
+            <h2>XP Progress</h2>
+            <svg id="xpChart" width="400" height="400"></svg>
+        </div>
+        
+        <div class="constellation-node audit-node">
+            <h2>Audit Ratio</h2>
+            <svg id="auditChart" width="400" height="400"></svg>
+        </div>
+        
+        <div class="constellation-node skills-node">
+            <h2>Skills Distribution</h2>
+            <svg id="skillsChart" width="400" height="400"></svg>
+        </div>
+        
+        <!-- Personal info node -->
+        <div class="constellation-node personal-node">
+            <h2>Personal Info</h2>
+            <div class="personal-content">
+              
+            </div>
+        </div>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="profile.js"></script>
+    <script src="star.js"></script>
+    <script src="xpgraph.js"></script>
+    <script src="line.js"></script>
+    <script src="audit.js"></script>
+    <script src="skills.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GraphQL Welcome</title>
+  <link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+  <div class="vortex-layer"></div>
+  <div class="orbit-stars"></div>
+  <div class="stars"></div>
+
+  <div class="welcome-container">
+    <div class="left-content">
+        <h1>Welcome to GRAPHQL</h1>
+        <h2>GRAPHQL</h2>
+        <p>by Mohamed Redha</p>
+        <p class="description">
+            A profile page built with GraphQL to display user-specific data, such as XP, grades, and audits. 
+            Includes interactive SVG-based graphs to visualize achievements and a secure login with JWT for data access.
+        </p>
+    </div>
+    <div class="images-container">
+        <img src="myimage.png" alt="My Image" class="profile-img">
+        <a href="https://www.linkedin.com/in/mohamed-redha-abdulla-1b661229a/" target="_blank">
+            <img src="linkden.png" alt="LinkedIn" class="linkedin-img">
+        </a>
+        <button class="try-graphql" onclick="showLogin()">TRY MY GRAPHQL</button>
+    </div>
+</div>
+
+  <div class="login" style="display: none;">
+      <div class="form-sign-in">
+          <form onsubmit="handleLogin(event)">
+              <h2>Login</h2>
+              <div class="input-group">
+                  <input type="text" id="username" required>
+                  <label>Username</label>
+              </div>
+              <div class="input-group">
+                  <input type="password" id="password" required>
+                  <label>Password</label>
+              </div>
+              <div id="errorMessage" style="color: #ff3333; text-align: center; margin-bottom: 10px; display: none;">
+                  User does not exist or password incorrect
+              </div>
+              <button type="submit">Login</button>
+          </form>
+      </div>
+  </div>
+  <script src="star.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
