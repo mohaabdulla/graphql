@@ -29,8 +29,8 @@ function createAuditRatioGraph(data) {
 
     // Convert values to MB (divide by 1000)
     const auditData = {
-        'Done': data.totalUp / 1000,
-        'Received': data.totalDown / 1000
+        'Done': data.totalUp / 1000000,
+        'Received': data.totalDown / 1000000
     };
 
     // Calculate ratio early to make sure it's displayed
