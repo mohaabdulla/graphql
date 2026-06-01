@@ -1,4 +1,4 @@
-function createXPGraph(data) {
+function createXPGraph(transactions) {
     const margin = {top: 20, right: 20, bottom: 50, left: 50};
     const width = 280 - margin.left - margin.right;
     const height = 280 - margin.top - margin.bottom;
@@ -13,7 +13,7 @@ function createXPGraph(data) {
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Transform data to show cumulative XP
-    const xpData = data.transactions
+    const xpData = transactions
         .map(t => ({
             date: new Date(t.createdAt),
             amount: t.amount

@@ -30,48 +30,170 @@ async function handleLogin(event) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                query: `{
-                    user {
-                        id
-                        login
-                        email
-                        firstName
-                        lastName
-                        campus
-                        attrs
-                        transactions {
-                            type
-                            amount
-                            createdAt
-                        }
-                        progresses {
-                            grade
-                            createdAt
-                            isDone
-                        }
-                        auditRatio
-                        totalUp
-                        totalDown
+                query: `query FullDashboardQuery {
+                  user {
+                    id
+                    login
+                    email
+                    firstName
+                    lastName
+                    campus
+                    attrs
+                    profile
+                    avatarUrl
+
+                    auditRatio
+                    totalUp
+                    totalUpBonus
+                    totalDown
+
+                    roles {
+                      slug
                     }
-                    transaction(
-                        where: {
-                            _and: [
-                                {type: { _iregex: "(^|[^[:alnum:]_])[[:alnum:]_]*skill_[[:alnum:]_]*($|[^[:alnum:]_])" }},
-                                {type: {_like: "%skill%"}},
-                                {object: {type: {_eq: "project"}}},
-                                {type: {_in: [
-                                    "skill_prog", "skill_algo", "skill_sys-admin", "skill_front-end", 
-                                    "skill_back-end", "skill_stats", "skill_ai", "skill_game", 
-                                    "skill_tcp"
-                                ]}}
-                            ]
-                        }
-                        order_by: [{type: asc}, {createdAt: desc}]
-                        distinct_on: type
-                    ) {
-                        amount
+
+                    labels {
+                      labelName
+                      labelId
+                      eventId
+                    }
+
+                    records {
+                      startAt
+                      endAt
+                      message
+                      createdAt
+                      type {
+                        canAccessPlatform
+                        isPermanent
+                        canBeAuditor
+                        label
                         type
+                      }
                     }
+
+                    transactions(
+                      order_by: [{ type: desc }, { amount: desc }]
+                      distinct_on: [type]
+                      where: {
+                        type: { _like: "skill_%" }
+                      }
+                    ) {
+                      type
+                      amount
+                      createdAt
+                    }
+
+                    progresses {
+                      id
+                      path
+                      grade
+                      isDone
+                      createdAt
+                      updatedAt
+                      eventId
+                    }
+                  }
+
+                  campuses: object(where: { type: { _eq: "campus" } }) {
+                    name
+                  }
+
+                  skillTransactions: transaction(
+                    where: {
+                      _and: [
+                        {
+                          type: {
+                            _iregex: "(^|[^[:alnum:]_])[[:alnum:]_]*skill_[[:alnum:]_]*($|[^[:alnum:]_])"
+                          }
+                        }
+                        {
+                          type: {
+                            _like: "%skill%"
+                          }
+                        }
+                        {
+                          object: {
+                            type: {
+                              _eq: "project"
+                            }
+                          }
+                        }
+                        {
+                          type: {
+                            _in: [
+                              "skill_prog"
+                              "skill_algo"
+                              "skill_sys-admin"
+                              "skill_front-end"
+                              "skill_back-end"
+                              "skill_stats"
+                              "skill_ai"
+                              "skill_game"
+                              "skill_tcp"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                    order_by: [{ type: asc }, { createdAt: desc }]
+                    distinct_on: [type]
+                  ) {
+                    amount
+                    type
+                    createdAt
+                  }
+
+                  xpTransactions: transaction(
+                    where: {
+                      type: { _eq: "xp" }
+                    }
+                    order_by: { createdAt: desc }
+                  ) {
+                    amount
+                    type
+                    createdAt
+                    path
+                    object {
+                      name
+                      type
+                    }
+                  }
+
+                  levelTransactions: transaction(
+                    where: {
+                      type: { _eq: "level" }
+                    }
+                    order_by: { createdAt: desc }
+                  ) {
+                    amount
+                    type
+                    createdAt
+                    path
+                  }
+
+                  latestProgresses: progress(
+                    order_by: [{ path: desc }, { createdAt: desc }, { grade: desc }]
+                    distinct_on: [path]
+                  ) {
+                    id
+                    path
+                    grade
+                    isDone
+                    version
+                    createdAt
+                    updatedAt
+                    eventId
+                    object {
+                      name
+                      type
+                    }
+                    event {
+                      id
+                      startAt
+                      endAt
+                      path
+                    }
+                  }
                 }`
             })
         });

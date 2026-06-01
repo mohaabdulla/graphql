@@ -27,14 +27,15 @@ function logout() {
       }
 
       const user = userData.data.user[0];
-      const skills = userData.data.transaction;
+      const skills = userData.data.skillTransactions;
+      const xpTransactions = userData.data.xpTransactions;
 
       // Populate user info
       populateUserInfo(user);
     
       // Create data visualizations
-      if (user.transactions) {
-          createXPGraph(user);
+      if (xpTransactions && xpTransactions.length > 0) {
+          createXPGraph(xpTransactions);
       }
     
       if (user.totalUp !== undefined && user.totalDown !== undefined) {
@@ -52,6 +53,7 @@ function logout() {
       setTimeout(() => {
           createConstellationLines();
           animateNodes();
+          init3DDashboard();
       }, 500);
   };
 
@@ -120,3 +122,20 @@ function logout() {
   });
 
 // Call after charts are rendered  window.addEventListener('load', createConstellationLines);
+
+function init3DDashboard() {
+    const container = document.querySelector('.constellation-container');
+    if (!container) return;
+    
+    document.addEventListener('mousemove', (e) => {
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+        
+        container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Reset rotation when mouse leaves the document body
+    document.addEventListener('mouseleave', () => {
+        container.style.transform = `rotateY(0deg) rotateX(0deg)`;
+    });
+}
