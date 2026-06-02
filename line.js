@@ -53,11 +53,11 @@ function drawLine(fromNode, toNode, container) {
     const distance = Math.sqrt(dx*dx + dy*dy);
     const angle = Math.atan2(dy, dx);
     
-    // Position and rotate the line
+    // Position and rotate the line (add 3D depth)
     line.style.width = `${distance}px`;
     line.style.left = `${fromX}px`;
     line.style.top = `${fromY}px`;
-    line.style.transform = `rotate(${angle}rad)`;
+    line.style.transform = `rotate(${angle}rad) translateZ(25px)`;
 }
 
 // Update constellation lines when window is resized
@@ -73,7 +73,9 @@ window.addEventListener('resize', () => {
       const nodes = document.querySelectorAll('.constellation-node');
     
       nodes.forEach((node, index) => {
-          // Add a subtle floating animation
+          // Set a unique depth and animation duration for each node
+          const depth = 20 + Math.random() * 30; // Random depth between 20px and 50px
+          node.style.setProperty('--depth', `${depth}px`);
           node.style.animation = `float ${3 + index * 0.5}s ease-in-out infinite alternate`;
       });
   }
@@ -82,17 +84,17 @@ window.addEventListener('resize', () => {
   document.head.insertAdjacentHTML('beforeend', `
       <style>
           @keyframes float {
-              0% { transform: translateY(0px); }
-              100% { transform: translateY(-10px); }
+              0% { transform: translateZ(var(--depth, 50px)) translateY(0px); }
+              100% { transform: translateZ(var(--depth, 50px)) translateY(-15px); }
           }
         
           .central-node {
-              animation: pulse 4s infinite alternate;
+              animation: pulse 4s infinite alternate, float 5s ease-in-out infinite alternate !important;
           }
         
           @keyframes pulse {
               0% { box-shadow: 0 0 20px rgba(14, 239, 255, 0.3); }
-              100% { box-shadow: 0 0 50px rgba(14, 239, 255, 0.7); }
+              100% { box-shadow: 0 0 60px rgba(14, 239, 255, 0.8); }
           }
       </style>
   `);

@@ -196,3 +196,97 @@ function createBlackHoleEffect() {
 window.addEventListener('load', function() {
   createBlackHoleEffect();
 });
+
+// Add this to the bottom of star.js to create cursor star trails
+document.addEventListener('mousemove', function(e) {
+  // Create a star at cursor position
+  if (Math.random() > 0.8) { // Only create stars occasionally
+    const star = document.createElement('div');
+    star.className = 'cursor-star';
+    star.style.left = `${e.pageX}px`;
+    star.style.top = `${e.pageY}px`;
+    
+    // Random size
+    const size = Math.random() * 3 + 1;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    
+    // Random start opacity
+    star.style.opacity = Math.random() * 0.5 + 0.5;
+    
+    document.body.appendChild(star);
+    
+    // Remove the star after animation completes
+    setTimeout(() => {
+      if (star && star.parentNode) {
+        star.parentNode.removeChild(star);
+      }
+    }, 1000);
+  }
+});
+
+// 3D Login Interactive Tilt
+document.addEventListener('DOMContentLoaded', () => {
+  const loginCard = document.querySelector('.form-sign-in');
+  const glare = document.querySelector('.glare');
+  if (!loginCard) return;
+
+  loginCard.addEventListener('mousemove', (e) => {
+      const rect = loginCard.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -15; 
+      const rotateY = ((x - centerX) / centerX) * 15;
+      
+      loginCard.style.transition = 'none';
+      loginCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      
+      if (glare) {
+          glare.style.opacity = '1';
+          glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.25) 0%, transparent 60%)`;
+      }
+  });
+
+  loginCard.addEventListener('mouseleave', () => {
+      loginCard.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+      loginCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      if (glare) {
+          glare.style.opacity = '0';
+      }
+  });
+});
+
+function initMagneticButtons() {
+    const magneticElements = document.querySelectorAll('.try-graphql, .back-button, .form-sign-in button');
+    
+    magneticElements.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            let baseTransform = '';
+            if (btn.closest('.form-sign-in')) {
+                baseTransform = 'translateZ(30px) ';
+            }
+            
+            btn.style.transition = 'transform 0.1s ease-out';
+            btn.style.transform = `${baseTransform}translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            if (btn.closest('.form-sign-in')) {
+                btn.style.transform = 'translateZ(30px)';
+            } else {
+                btn.style.transform = 'translate(0px, 0px)';
+            }
+        });
+    });
+}
+
+window.addEventListener('DOMContentLoaded', initMagneticButtons);
